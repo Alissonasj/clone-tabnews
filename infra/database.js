@@ -7,14 +7,7 @@ async function query(queryObject) {
     port: process.env.POSTGRES_PORT,
     database: process.env.POSTGRES_DB,
     user: process.env.POSTGRES_USER,
-  });
-
-  console.log("Configurações de ambiente Postgres: ", {
-    host: process.env.POSTGRES_HOST,
-    password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_PORT,
-    database: process.env.POSTGRES_DB,
-    user: process.env.POSTGRES_USER,
+    ssl: process.env.NODE_ENV === "development" ? false : true,
   });
 
   try {
