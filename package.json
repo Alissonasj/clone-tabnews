@@ -4,7 +4,9 @@
   "description": "Aprendendo a programar com o Felipe Deschamps",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && npm run services:wait:database && npm run migration:up && next dev",
+    "dev": "node infra/scripts/post-dev.js",
+    "dev:run": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
+    "postdev": "npm run services:stop",
     "test": "npm run services:up && concurrently --names next,jest --hide next --kill-others --success command-jest \"next dev\" \"jest --runInBand --verbose\"",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand",
