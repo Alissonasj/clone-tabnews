@@ -22,26 +22,27 @@ function StatusServer() {
   });
 
   const updatedAtText = new Date(status?.updated_at).toLocaleString("pt-BR");
-
-  return (
-    <>
-      {isLoading ? (
-        <ul>
-          <p>Carregando...</p>
-        </ul>
-      ) : (
-        <ul>
-          <li>Updated At: {updatedAtText}</li>
-          <li>
-            Max Connections: {status?.dependencies.database.max_connections}
-          </li>
-          <li>
-            Opended Connections:
-            {status?.dependencies.database.opened_connections}
-          </li>
-          <li>Database Version: {status?.dependencies.database.version}</li>
-        </ul>
-      )}
-    </>
+  let statusServer = (
+    <ul>
+      <li>Carregando...</li>
+    </ul>
   );
+
+  if (!isLoading) {
+    statusServer = (
+      <ul>
+        <li>Updated At: {updatedAtText}</li>
+        <li>
+          Max Connections: {status?.dependencies.database.max_connections}
+        </li>
+        <li>
+          Opended Connections:
+          {status?.dependencies.database.opened_connections}
+        </li>
+        <li>Database Version: {status?.dependencies.database.version}</li>
+      </ul>
+    );
+  }
+
+  return <>{statusServer}</>;
 }
