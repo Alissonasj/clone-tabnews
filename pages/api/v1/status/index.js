@@ -29,7 +29,7 @@ export default async function status(request, response) {
       database: {
         status: "",
         max_connections: parseInt(databaseMaxConnectionValue),
-        opned_connections: databaseCurrentConnectionsValue,
+        opened_connections: databaseCurrentConnectionsValue,
         latency: "",
         version: databaseVersionValue,
       },
