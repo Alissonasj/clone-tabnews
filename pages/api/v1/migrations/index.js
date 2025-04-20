@@ -1,45 +1,22 @@
-import controller from "infra/controller";
-import database from "infra/database.js";
+import controller from "infra/controller.js";
+import migrator from "models/migrator.js";
 import { createRouter } from "next-connect";
-import migrationRunner from "node-pg-migrate";
-import { resolve } from "node:path";
 
-let dbClient;
-let defaultMigrationsOptions;
 const router = createRouter();
 
-router.use(connectDatabase);
 router.get(getMigrations);
 router.post(postMigrations);
 
 export default router.handler(controller.errorHandlers);
 
-async function connectDatabase(request, response, next) {
-  dbClient = await database.getNewClient();
-
-  defaultMigrationsOptions = {
-    dbClient,
-    dryRun: true,
-    dir: resolve("infra", "migrations"),
-    direction: "up",
-    verbose: true,
-    migrationsTable: "pgmigrations",
-  };
-  await next();
-  await dbClient?.end();
-}
-
 async function getMigrations(request, response) {
-  const pedingMigrations = await migrationRunner(defaultMigrationsOptions);
+  const pedingMigrations = await migrator.listPeddingMigrations();
 
   return response.status(200).json(pedingMigrations);
 }
 
 async function postMigrations(request, response) {
-  const migratedMigrations = await migrationRunner({
-    ...defaultMigrationsOptions,
-    dryRun: false,
-  });
+  const migratedMigrations = await migrator.runPedingMigrations();
 
   if (migratedMigrations.length > 0) {
     return response.status(201).json(migratedMigrations);
