@@ -1,4 +1,5 @@
 import database from "infra/database.js";
+import { ServiceError } from "infra/erros";
 import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
 
@@ -20,7 +21,8 @@ async function listPeddingMigrations() {
     });
     return pedingMigrations;
   } catch (error) {
-    console.error(error);
+    const serviceErrorObject = new ServiceError({ cause: error });
+    console.error(serviceErrorObject);
   } finally {
     await dbClient?.end();
   }
@@ -36,7 +38,8 @@ async function runPedingMigrations() {
     });
     return migratedMigrations;
   } catch (error) {
-    console.error(error);
+    const serviceErrorObject = new ServiceError({ cause: error });
+    console.error(serviceErrorObject);
   } finally {
     await dbClient?.end();
   }
