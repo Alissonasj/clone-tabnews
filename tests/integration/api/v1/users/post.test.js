@@ -1,4 +1,3 @@
-import database from "infra/database";
 import orchestrator from "tests/orchestrator";
 import { version as uuidVersion } from "uuid";
 
@@ -67,9 +66,6 @@ describe("POST to api/v1/users", () => {
         }),
       });
 
-      const users = await database.query("SELECT * FROM users;");
-      console.log(users.rows);
-
       const response2Body = await response2.json();
 
       expect(response2.status).toBe(400);
@@ -80,6 +76,7 @@ describe("POST to api/v1/users", () => {
         status_code: 400,
       });
     });
+
     test("With duplicated 'username'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -106,9 +103,6 @@ describe("POST to api/v1/users", () => {
           password: "senha123",
         }),
       });
-
-      const users = await database.query("SELECT * FROM users;");
-      console.log(users.rows);
 
       const response2Body = await response2.json();
 
